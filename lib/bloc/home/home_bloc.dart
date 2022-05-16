@@ -24,11 +24,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       if (event is HomeStarted || event is HomeRefresh) {
         try {
           emit(HomeLoading());
+          //throw Exception('error');
+          print('Start');
           final banners = await bannerRepository.getAll();
           final latestProducts =
               await productRepositoy.getAll(ProductSort.lastest);
           final popularProducts =
               await productRepositoy.getAll(ProductSort.populer);
+          print('end');
           emit(
             HomeSuccess(
               banners: banners,
@@ -37,6 +40,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             ),
           );
         } catch (ex) {
+          print('error');
           emit(
             HomeError(
               exception: ex is AppException

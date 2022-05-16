@@ -44,17 +44,19 @@ class HomeScreen extends StatelessWidget {
             } else if (state is HomeLoading) {
               return const Center(child: CircularProgressIndicator());
             } else if (state is HomeError) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(state.exception.message.toString()),
-                  ElevatedButton(
-                      onPressed: () {
-                        BlocProvider.of<HomeBloc>(context).add(HomeRefresh());
-                      },
-                      child: Text('تلاش دوباره')),
-                ],
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(state.exception.message.toString()),
+                    ElevatedButton(
+                        onPressed: () {
+                          BlocProvider.of<HomeBloc>(context).add(HomeRefresh());
+                        },
+                        child: Text('تلاش دوباره')),
+                  ],
+                ),
               );
             } else {
               throw Exception('state not support');
