@@ -19,7 +19,7 @@ class HomeError extends HomeState {
 }
 
 class HomeSuccess extends HomeState {
-  final List<BanerEntity> banners;
+  final List<BannerEntity> banners;
   final List<ProductEntity> latestProducts;
   final List<ProductEntity> popularProducts;
 

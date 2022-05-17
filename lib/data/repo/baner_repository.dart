@@ -9,7 +9,7 @@ final bannerRepository =
     BanerRepository(dataSource: BannerRemoteDataSource(httpClient: httpClient));
 
 abstract class IBanerRepositoy {
-  Future<List<BanerEntity>> getAll();
+  Future<List<BannerEntity>> getAll();
 }
 
 class BanerRepository implements IBanerRepositoy {
@@ -18,7 +18,7 @@ class BanerRepository implements IBanerRepositoy {
   BanerRepository({required this.dataSource});
 
   @override
-  Future<List<BanerEntity>> getAll() async {
+  Future<List<BannerEntity>> getAll() async {
     final products = dataSource.getAll();
     return products;
   }

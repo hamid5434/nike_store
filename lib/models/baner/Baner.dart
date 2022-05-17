@@ -1,12 +1,12 @@
-class BanerEntity {
+class BannerEntity {
   int? id;
   String? image;
   int? linkType;
   String? linkValue;
 
-  BanerEntity({this.id, this.image, this.linkType, this.linkValue});
+  BannerEntity({this.id, this.image, this.linkType, this.linkValue});
 
-  BanerEntity.fromJson(Map<String, dynamic> json) {
+  BannerEntity.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     image = json['image'];
     linkType = json['link_type'];
@@ -23,13 +23,13 @@ class BanerEntity {
   }
 }
 
-class BanerEntitys {
-  final List<BanerEntity> list;
+class BannerEntitys {
+  final List<BannerEntity> list;
 
-  BanerEntitys({required this.list});
+  BannerEntitys({required this.list});
 
-  factory BanerEntitys.fromJson(List<dynamic> json) {
-    return BanerEntitys(
-        list: json.map((e) => BanerEntity.fromJson(e)).toList());
+  factory BannerEntitys.fromJson(List<dynamic> json) {
+    return BannerEntitys(
+        list: json.map((e) => BannerEntity.fromJson(e)).toList());
   }
 }
