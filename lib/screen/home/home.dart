@@ -50,6 +50,11 @@ class HomeScreen extends StatelessWidget {
                         return HorizontalProduct(
                             title: 'جدیدترین',
                             onTab: () {},
+                            products: state.latestProducts);
+                      case 4:
+                        return HorizontalProduct(
+                            title: 'پر بازدیدترین',
+                            onTab: () {},
                             products: state.popularProducts);
                       default:
                         return Container();
@@ -72,7 +77,7 @@ class HomeScreen extends StatelessWidget {
                             BlocProvider.of<HomeBloc>(context)
                                 .add(HomeRefresh());
                           },
-                          child: const Text('تلاش دوباره')),
+                          child: const Text('تلاش دوباره'),),
                     ],
                   ),
                 ),
