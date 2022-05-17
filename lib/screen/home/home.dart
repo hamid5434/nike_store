@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nike_store/bloc/home/home_bloc.dart';
+import 'package:nike_store/common/utils.dart';
 import 'package:nike_store/data/repo/baner_repository.dart';
 import 'package:nike_store/data/repo/product_repository.dart';
 import 'package:nike_store/screen/home/widget/widget.dart';
@@ -41,10 +42,15 @@ class HomeScreen extends StatelessWidget {
                       case 1:
                         return Container();
                       case 2:
-                        return Container(
+                        return SizedBox(
                           height: 200,
                           child: BannerSlider(banners: state.banners),
                         );
+                      case 3:
+                        return HorizontalProduct(
+                            title: 'جدیدترین',
+                            onTab: () {},
+                            products: state.popularProducts);
                       default:
                         return Container();
                     }

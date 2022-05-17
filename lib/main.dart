@@ -23,6 +23,13 @@ class MyApp extends StatelessWidget {
           onSecondary: Colors.white,
         ),
         textTheme: TextTheme(
+          subtitle1: TextStyle(
+            fontFamily: 'iransans',
+            color: LightThemeColors.seconderyColor,
+          ),
+          button: const TextStyle(
+            fontFamily: 'iransans',
+          ),
           bodyText2: const TextStyle(
             fontFamily: 'iransans',
           ),
@@ -44,6 +51,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 // 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
 class MyHomePage extends StatelessWidget {
   const MyHomePage({Key? key}) : super(key: key);
