@@ -32,7 +32,7 @@ class ProductDetailScreen extends StatelessWidget {
               ),
               foregroundColor: LightThemeColors.primaryTextColor,
               actions: [
-                IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.heart)),
+                IconButton(onPressed: () {}, icon: const Icon(CupertinoIcons.heart)),
               ],
             ),
             SliverToBoxAdapter(
@@ -101,7 +101,7 @@ class ProductDetailScreen extends StatelessWidget {
                           'نظرات کاربران',
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
-                        TextButton(onPressed: () {}, child: Text('ثبت نظر'))
+                        TextButton(onPressed: () {}, child: const Text('ثبت نظر'))
                       ],
                     ),
                   ),
