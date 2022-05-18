@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         textTheme: TextTheme(
           subtitle1: TextStyle(
             fontFamily: 'iransans',
-            color: LightThemeColors.seconderyColor,
+            color: LightThemeColors.seconderyTextColor,
           ),
           button: const TextStyle(
             fontFamily: 'iransans',
@@ -36,11 +36,12 @@ class MyApp extends StatelessWidget {
           headline6: const TextStyle(
             fontFamily: 'iransans',
             fontWeight: FontWeight.bold,
+            fontSize: 18,
           ),
           caption: const TextStyle(
             fontFamily: 'iransans',
           ).apply(
-            color: LightThemeColors.seconderyColor,
+            color: LightThemeColors.seconderyTextColor,
           ),
         ),
       ),
