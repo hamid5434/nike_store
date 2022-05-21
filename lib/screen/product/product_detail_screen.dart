@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:nike_store/common/theme.dart';
 import 'package:nike_store/common/utils.dart';
 import 'package:nike_store/models/product/product.dart';
+import 'package:nike_store/screen/product/comment/comment_list.dart';
 import 'package:nike_store/widgets/widgets.dart';
 
 class ProductDetailScreen extends StatelessWidget {
@@ -19,7 +20,13 @@ class ProductDetailScreen extends StatelessWidget {
         floatingActionButton: SizedBox(
             width: MediaQuery.of(context).size.width * .9,
             child: FloatingActionButton.extended(
-                onPressed: () {}, label: const Text('افزودن به سبد خرید'))),
+                onPressed: () {},
+                label: Text(
+                  'افزودن به سبد خرید',
+                  style: Theme.of(context).textTheme.headline6!.copyWith(
+                        color: Theme.of(context).colorScheme.onSecondary,
+                      ),
+                ))),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         body: CustomScrollView(
           scrollDirection: Axis.vertical,
@@ -32,7 +39,8 @@ class ProductDetailScreen extends StatelessWidget {
               ),
               foregroundColor: LightThemeColors.primaryTextColor,
               actions: [
-                IconButton(onPressed: () {}, icon: const Icon(CupertinoIcons.heart)),
+                IconButton(
+                    onPressed: () {}, icon: const Icon(CupertinoIcons.heart)),
               ],
             ),
             SliverToBoxAdapter(
@@ -101,18 +109,15 @@ class ProductDetailScreen extends StatelessWidget {
                           'نظرات کاربران',
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
-                        TextButton(onPressed: () {}, child: const Text('ثبت نظر'))
+                        TextButton(
+                            onPressed: () {}, child: const Text('ثبت نظر'))
                       ],
                     ),
                   ),
-                  Container(
-                    width: 200,
-                    height: 1000,
-                    color: Colors.grey,
-                  )
                 ],
               ),
-            )
+            ),
+            CommentList(productId: product.id!),
           ],
         ),
       ),

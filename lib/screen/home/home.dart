@@ -6,6 +6,7 @@ import 'package:nike_store/common/utils.dart';
 import 'package:nike_store/data/repo/baner_repository.dart';
 import 'package:nike_store/data/repo/product_repository.dart';
 import 'package:nike_store/screen/home/widget/widget.dart';
+import 'package:nike_store/widgets/app_error_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -66,20 +67,11 @@ class HomeScreen extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             } else if (state is HomeError) {
               return SingleChildScrollView(
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(state.exception.message.toString()),
-                      ElevatedButton(
-                          onPressed: () {
-                            BlocProvider.of<HomeBloc>(context)
-                                .add(HomeRefresh());
-                          },
-                          child: const Text('تلاش دوباره'),),
-                    ],
-                  ),
+                child: AppErrorWidget(
+                  onTab: () {
+                    BlocProvider.of<HomeBloc>(context).add(HomeRefresh());
+                  },
+                  exception: state.exception,
                 ),
               );
             } else {
