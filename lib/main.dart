@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:nike_store/common/theme.dart';
 import 'package:nike_store/data/repo/baner_repository.dart';
 import 'package:nike_store/data/repo/product_repository.dart';
+import 'package:nike_store/screen/auth/auth_screen.dart';
 import 'package:nike_store/screen/home/home.dart';
+import 'package:nike_store/screen/root/root_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -47,7 +49,7 @@ class MyApp extends StatelessWidget {
       ),
       home: const Directionality(
         textDirection: TextDirection.rtl,
-        child: HomeScreen(),
+        child: AuthScreen(),
       ),
     );
   }
