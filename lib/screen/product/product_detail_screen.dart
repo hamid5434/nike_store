@@ -9,18 +9,46 @@ import 'package:nike_store/models/product/product.dart';
 import 'package:nike_store/screen/product/comment/comment_list.dart';
 import 'package:nike_store/widgets/widgets.dart';
 
-class ProductDetailScreen extends StatelessWidget {
+class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({Key? key, required this.product})
       : super(key: key);
 
   final ProductEntity product;
 
   @override
+  State<ProductDetailScreen> createState() => _ProductDetailScreenState();
+}
+
+
+class _ProductDetailScreenState extends State<ProductDetailScreen> {
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: BlocProvider<ProductBloc>(
-        create: (context) => ProductBloc(cartRepository),
+        create: (context) {
+          final bloc = ProductBloc(cartRepository);
+          bloc.stream.listen((state) {
+            if (state is ProductAddToCartButtonSuccess) {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('با موفقیت به سبد خرید شما اضافه گردید')));
+            } else if (state is ProductAddToCartButtonError) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(
+                state.exception.message.toString(),
+              )));
+            }
+          });
+          return bloc;
+        },
         child: Scaffold(
           floatingActionButton: SizedBox(
               width: MediaQuery.of(context).size.width * .9,
@@ -29,7 +57,7 @@ class ProductDetailScreen extends StatelessWidget {
                   return FloatingActionButton.extended(
                     onPressed: () {
                       BlocProvider.of<ProductBloc>(context)
-                          .add(CartAddButtonClick(product.id!));
+                          .add(CartAddButtonClick(widget.product.id!));
                     },
                     label: state is ProductAddToCartButtonLoading
                         ? const CupertinoActivityIndicator()
@@ -55,7 +83,7 @@ class ProductDetailScreen extends StatelessWidget {
               SliverAppBar(
                 expandedHeight: MediaQuery.of(context).size.width * .8,
                 flexibleSpace: ImageLoadingService(
-                  url: product.image!,
+                  url: widget.product.image!,
                 ),
                 foregroundColor: LightThemeColors.primaryTextColor,
                 actions: [
@@ -75,7 +103,7 @@ class ProductDetailScreen extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8),
                             child: Text(
-                              product.title!,
+                              widget.product.title!,
                               style: Theme.of(context).textTheme.headline6,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -89,7 +117,7 @@ class ProductDetailScreen extends StatelessWidget {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 8),
                               child: Text(
-                                product.previousPrice!.withPriceLabel,
+                                widget.product.previousPrice!.withPriceLabel,
                                 style: Theme.of(context)
                                     .textTheme
                                     .caption!
@@ -105,7 +133,7 @@ class ProductDetailScreen extends StatelessWidget {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 8),
                               child: Text(
-                                product.price!.withPriceLabel,
+                                widget.product.price!.withPriceLabel,
                                 style: Theme.of(context).textTheme.subtitle2,
                               ),
                             ),
@@ -140,7 +168,7 @@ class ProductDetailScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              CommentList(productId: product.id!),
+              CommentList(productId: widget.product.id!),
             ],
           ),
         ),
