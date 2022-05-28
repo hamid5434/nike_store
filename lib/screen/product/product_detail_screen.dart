@@ -32,7 +32,7 @@ class ProductDetailScreen extends StatelessWidget {
                           .add(CartAddButtonClick(product.id!));
                     },
                     label: state is ProductAddToCartButtonLoading
-                        ? CupertinoActivityIndicator()
+                        ? const CupertinoActivityIndicator()
                         : Text(
                             'افزودن به سبد خرید',
                             style: Theme.of(context)
