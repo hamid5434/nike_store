@@ -2,5 +2,5 @@ class AppException {
   final String message;
   final int statusCode;
 
-  AppException({required this.message, required this.statusCode});
+  AppException({ this.message = 'خطای نامشخص',  this.statusCode = 1});
 }

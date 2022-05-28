@@ -12,7 +12,9 @@ abstract class IAuthRepository {
   Future<LoginModel> register(
       {required String username, required String password});
 
-  Future<void> refreshToken({required String token});
+  Future<void> refreshToken();
+
+  Future<void> signOut();
 }
 
 class AuthRepository implements IAuthRepository {
@@ -33,10 +35,13 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<void> refreshToken({required String token}) async {
-    final LoginModel loginModel = await dataSource.refreshToken(token: token);
-    debugPrint("refresh token is: " + loginModel.refreshToken!);
-    await _persistAuthToken(loginModel: loginModel);
+  Future<void> refreshToken() async {
+    if (authChangeNotifier.value != null) {
+      final LoginModel loginModel = await dataSource.refreshToken(
+          token: authChangeNotifier.value!.refreshToken!);
+      debugPrint('refresh token is22: ${loginModel.refreshToken}');
+      _persistAuthToken(loginModel: loginModel);
+    }
   }
 
   @override
@@ -53,6 +58,8 @@ class AuthRepository implements IAuthRepository {
 
     await prefs.setString('access_token', loginModel.accessToken!);
     await prefs.setString('refresh_token', loginModel.refreshToken!);
+
+    await loadAuthInfo();
   }
 
   Future loadAuthInfo() async {
@@ -61,8 +68,16 @@ class AuthRepository implements IAuthRepository {
     String access_token = await prefs.getString('access_token') ?? '';
     String refresh_token = await prefs.getString('refresh_token') ?? '';
 
-    if(access_token.isNotEmpty && refresh_token.isNotEmpty) {
-      authChangeNotifier.value = LoginModel(accessToken: access_token, refreshToken: refresh_token);
+    if (access_token.isNotEmpty && refresh_token.isNotEmpty) {
+      authChangeNotifier.value =
+          LoginModel(accessToken: access_token, refreshToken: refresh_token);
     }
+  }
+
+  @override
+  Future<void> signOut() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+    authChangeNotifier.value = null;
   }
 }
