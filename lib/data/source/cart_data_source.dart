@@ -13,7 +13,7 @@ abstract class ICartDataSource {
 
   Future<int> count(int cartItemId);
 
-  Future<List<CartItemEntity>> getAll();
+  Future<CartItems> getAll();
 }
 
 class CartRemoteDataSource
@@ -53,8 +53,10 @@ class CartRemoteDataSource
   }
 
   @override
-  Future<List<CartItemEntity>> getAll() {
-    // TODO: implement getAll
-    throw UnimplementedError();
+  Future<CartItems> getAll() async {
+    final response = await httpClient.get('cart/list');
+    validateResponse(response);
+    CartItems cartItems = CartItems.fromJson(response.data);
+    return cartItems;
   }
 }

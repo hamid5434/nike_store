@@ -46,8 +46,7 @@ class CartRepository implements ICartRepository {
   }
 
   @override
-  Future<List<CartItemEntity>> getAll() {
-    // TODO: implement getAll
-    throw UnimplementedError();
+  Future<CartItems> getAll() async {
+    return await dataSource.getAll();
   }
 }
