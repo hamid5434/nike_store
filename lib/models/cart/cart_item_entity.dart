@@ -11,7 +11,7 @@ class CartItems {
     if (json['cart_items'] != null) {
       cartItems = <CartItemEntity>[];
       json['cart_items'].forEach((v) {
-        cartItems!.add(new CartItemEntity.fromJson(v));
+        cartItems!.add(CartItemEntity.fromJson(v));
       });
     }
     payablePrice = json['payable_price'];
@@ -41,7 +41,7 @@ class CartItemEntity {
   CartItemEntity.fromJson(Map<String, dynamic> json) {
     cartItemId = json['cart_item_id'];
     product =
-    json['product'] != null ? new Product.fromJson(json['product']) : null;
+        json['product'] != null ? new Product.fromJson(json['product']) : null;
     count = json['count'];
   }
 
@@ -60,6 +60,7 @@ class Product {
   int? id;
   String? title;
   int? price;
+  int? previusPrice;
   int? discount;
   String? image;
   int? status;
@@ -68,18 +69,20 @@ class Product {
 
   Product(
       {this.id,
-        this.title,
-        this.price,
-        this.discount,
-        this.image,
-        this.status,
-        this.categoryId,
-        this.views});
+      this.title,
+      this.price,
+      this.previusPrice,
+      this.discount,
+      this.image,
+      this.status,
+      this.categoryId,
+      this.views});
 
   Product.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
     price = json['price'];
+    previusPrice = json['previous_price'] ?? json['price'] + json['discount'];
     discount = json['discount'];
     image = json['image'];
     status = json['status'];
