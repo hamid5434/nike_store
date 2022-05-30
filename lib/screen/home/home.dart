@@ -67,11 +67,15 @@ class HomeScreen extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             } else if (state is HomeError) {
               return SingleChildScrollView(
-                child: AppErrorWidget(
-                  onTab: () {
-                    BlocProvider.of<HomeBloc>(context).add(HomeRefresh());
-                  },
-                  exception: state.exception,
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height * .9,
+                  child: AppErrorWidget(
+                    onTab: () {
+                      BlocProvider.of<HomeBloc>(context).add(HomeRefresh());
+                    },
+                    exception: state.exception,
+                  ),
                 ),
               );
             } else {
