@@ -5,10 +5,9 @@ import 'package:nike_store/data/repo/baner_repository.dart';
 import 'package:nike_store/screen/auth/auth_screen.dart';
 import 'package:nike_store/screen/root/root_screen.dart';
 
-
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  authRepository.loadAuthInfo();
+  await authRepository.loadAuthInfo();
   runApp(const MyApp());
 }
 
@@ -21,10 +20,16 @@ class MyApp extends StatelessWidget {
       title: 'Nike',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          foregroundColor: LightThemeColors.primaryTextColor,
+        ),
         colorScheme: ColorScheme.light(
           primary: LightThemeColors.primaryColor,
           secondary: LightThemeColors.seconderyColor,
           onSecondary: Colors.white,
+          secondaryVariant:  const Color(0xfff5f5f5),
         ),
         textTheme: TextTheme(
           subtitle1: TextStyle(

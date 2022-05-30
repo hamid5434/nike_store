@@ -22,6 +22,21 @@ class CartError extends CartState {
   final AppException exception;
 
   const CartError(this.exception);
+
   @override
   List<Object> get props => [exception];
+}
+
+class CartEmpty extends CartState {
+  const CartEmpty();
+
+  @override
+  List<Object> get props => [];
+}
+
+class CartAuthRequired extends CartState {
+  const CartAuthRequired();
+
+  @override
+  List<Object> get props => [];
 }

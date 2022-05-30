@@ -9,7 +9,7 @@ final authRepository = AuthRepository(AuthDataSource(httpClient: httpClient));
 abstract class IAuthRepository {
   Future<void> login({required String username, required String password});
 
-  Future<LoginModel> register(
+  Future<AuthInfo> register(
       {required String username, required String password});
 
   Future<void> refreshToken();
@@ -20,7 +20,7 @@ abstract class IAuthRepository {
 class AuthRepository implements IAuthRepository {
   final IAuthDataSource dataSource;
 
-  static final ValueNotifier<LoginModel?> authChangeNotifier =
+  static final ValueNotifier<AuthInfo?> authChangeNotifier =
       ValueNotifier(null);
 
   AuthRepository(this.dataSource);
@@ -28,7 +28,7 @@ class AuthRepository implements IAuthRepository {
   @override
   Future<void> login(
       {required String username, required String password}) async {
-    final LoginModel loginModel =
+    final AuthInfo loginModel =
         await dataSource.login(username: username, password: password);
     await _persistAuthToken(loginModel: loginModel);
     debugPrint("access token is: " + loginModel.accessToken!);
@@ -37,7 +37,7 @@ class AuthRepository implements IAuthRepository {
   @override
   Future<void> refreshToken() async {
     if (authChangeNotifier.value != null) {
-      final LoginModel loginModel = await dataSource.refreshToken(
+      final AuthInfo loginModel = await dataSource.refreshToken(
           token: authChangeNotifier.value!.refreshToken!);
       debugPrint('refresh token is22: ${loginModel.refreshToken}');
       _persistAuthToken(loginModel: loginModel);
@@ -45,15 +45,15 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<LoginModel> register(
+  Future<AuthInfo> register(
       {required String username, required String password}) async {
-    final LoginModel loginModel =
+    final AuthInfo loginModel =
         await dataSource.register(username: username, password: password);
     debugPrint("refresh token is: " + loginModel.refreshToken!);
     return loginModel;
   }
 
-  Future<void> _persistAuthToken({required LoginModel loginModel}) async {
+  Future<void> _persistAuthToken({required AuthInfo loginModel}) async {
     final prefs = await SharedPreferences.getInstance();
 
     await prefs.setString('access_token', loginModel.accessToken!);
@@ -70,7 +70,7 @@ class AuthRepository implements IAuthRepository {
 
     if (access_token.isNotEmpty && refresh_token.isNotEmpty) {
       authChangeNotifier.value =
-          LoginModel(accessToken: access_token, refreshToken: refresh_token);
+          AuthInfo(accessToken: access_token, refreshToken: refresh_token);
     }
   }
 

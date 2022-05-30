@@ -1,13 +1,13 @@
-class LoginModel {
+class AuthInfo {
   String? tokenType;
   int? expiresIn;
   String? accessToken;
   String? refreshToken;
 
-  LoginModel(
+  AuthInfo(
       {this.tokenType, this.expiresIn, this.accessToken, this.refreshToken});
 
-  LoginModel.fromJson(Map<String, dynamic> json) {
+  AuthInfo.fromJson(Map<String, dynamic> json) {
     tokenType = json['token_type'];
     expiresIn = json['expires_in'];
     accessToken = json['access_token'];

@@ -4,13 +4,13 @@ import 'package:nike_store/common/http_reponse_validator_dart.dart';
 import 'package:nike_store/models/login/login_model.dart';
 
 abstract class IAuthDataSource {
-  Future<LoginModel> login(
+  Future<AuthInfo> login(
       {required String username, required String password});
 
-  Future<LoginModel> register(
+  Future<AuthInfo> register(
       {required String username, required String password});
 
-  Future<LoginModel> refreshToken({required String token});
+  Future<AuthInfo> refreshToken({required String token});
 }
 
 class AuthDataSource with HttpResponseValidator implements IAuthDataSource {
@@ -19,7 +19,7 @@ class AuthDataSource with HttpResponseValidator implements IAuthDataSource {
   AuthDataSource({required this.httpClient});
 
   @override
-  Future<LoginModel> login(
+  Future<AuthInfo> login(
       {required String username, required String password}) async {
     final response = await httpClient.post('auth/token', data: {
       "grant_type": "password",
@@ -29,11 +29,11 @@ class AuthDataSource with HttpResponseValidator implements IAuthDataSource {
       "password": password
     });
     validateResponse(response);
-    return LoginModel.fromJson(response.data);
+    return AuthInfo.fromJson(response.data);
   }
 
   @override
-  Future<LoginModel> refreshToken({required String token}) async {
+  Future<AuthInfo> refreshToken({required String token}) async {
     final response = await httpClient.post('auth/token', data: {
       "grant_type": "refresh_token",
       "client_id": 2,
@@ -41,11 +41,11 @@ class AuthDataSource with HttpResponseValidator implements IAuthDataSource {
       "refresh_token": token,
     });
     validateResponse(response);
-    return LoginModel.fromJson(response.data);
+    return AuthInfo.fromJson(response.data);
   }
 
   @override
-  Future<LoginModel> register(
+  Future<AuthInfo> register(
       {required String username, required String password}) async {
     final response = await httpClient
         .post('user/register', data: {"email": username, "password": password});
