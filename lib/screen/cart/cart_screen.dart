@@ -47,7 +47,7 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.secondaryVariant,
+        backgroundColor: Theme.of(context).colorScheme.secondaryVariant,
         appBar: AppBar(
           centerTitle: true,
           title: const Text('سبد خرید'),
@@ -70,11 +70,28 @@ class _CartScreenState extends State<CartScreen> {
                   child: Text(state.exception.message.toString()),
                 );
               } else if (state is CartSuccess) {
-                return CartListItems(cartItems: state.cartItems);
+                final cartItems = state.cartItems;
+                return ListView.builder(
+                  itemCount: cartItems.cartItems!.length,
+                  itemBuilder: (context, index) {
+                    final data = cartItems.cartItems![index];
+                    return CartItem(
+                      data: data,
+                      onDeleteButtonClick: () {
+                        cartBloc?.add(CartDeleteButtonClicked(data.cartItemId!));
+                      },
+                    );
+                  },
+                );
               } else if (state is CartAuthRequired) {
                 return EmptyView(
-                  image: SvgPicture.asset('assets/images/auth_required.svg',width: 140,height: 140,),
-                  message: 'کاربر گرامی برای مشاهده سبد خرید باید ابتدا وارد حساب کاربری خود شوید .',
+                  image: SvgPicture.asset(
+                    'assets/images/auth_required.svg',
+                    width: 140,
+                    height: 140,
+                  ),
+                  message:
+                      'کاربر گرامی برای مشاهده سبد خرید باید ابتدا وارد حساب کاربری خود شوید .',
                   callToAction: ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).push(
@@ -91,14 +108,16 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                   ),
                 );
-              }
-              else if(state is CartEmpty){
+              } else if (state is CartEmpty) {
                 return EmptyView(
-                  image: SvgPicture.asset('assets/images/empty_cart.svg',width: 150,height: 150,),
+                  image: SvgPicture.asset(
+                    'assets/images/empty_cart.svg',
+                    width: 150,
+                    height: 150,
+                  ),
                   message: 'سبد خرید شما خالی می باشد.',
                 );
-              }
-              else {
+              } else {
                 throw Exception('state not support');
               }
             },

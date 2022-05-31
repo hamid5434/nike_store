@@ -1,12 +1,11 @@
 part of 'cart_bloc.dart';
 
-abstract class CartState extends Equatable {
+abstract class CartState  {
   const CartState();
 }
 
 class CartLoading extends CartState {
-  @override
-  List<Object> get props => [];
+
 }
 
 class CartSuccess extends CartState {
@@ -14,8 +13,6 @@ class CartSuccess extends CartState {
 
   const CartSuccess(this.cartItems);
 
-  @override
-  List<Object> get props => [cartItems];
 }
 
 class CartError extends CartState {
@@ -23,20 +20,15 @@ class CartError extends CartState {
 
   const CartError(this.exception);
 
-  @override
-  List<Object> get props => [exception];
 }
 
 class CartEmpty extends CartState {
   const CartEmpty();
 
-  @override
-  List<Object> get props => [];
 }
 
 class CartAuthRequired extends CartState {
   const CartAuthRequired();
 
-  @override
-  List<Object> get props => [];
+
 }
