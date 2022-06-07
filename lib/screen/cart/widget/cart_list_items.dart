@@ -16,9 +16,9 @@ class CartListItems extends StatelessWidget {
         final data = cartItems.cartItems![index];
         return CartItem(
           data: data,
-          onDeleteButtonClick: () {
-
-          },
+          onDeleteButtonClick: () {},
+          onDecraseButtonClick: () {},
+          onIncraseButtonClick: () {},
         );
       },
     );

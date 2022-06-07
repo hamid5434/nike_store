@@ -9,10 +9,14 @@ class CartItem extends StatelessWidget {
     Key? key,
     required this.data,
     required this.onDeleteButtonClick,
+    required this.onIncraseButtonClick,
+    required this.onDecraseButtonClick,
   }) : super(key: key);
 
   final CartItemEntity data;
   final GestureTapCallback onDeleteButtonClick;
+  final GestureTapCallback onIncraseButtonClick;
+  final GestureTapCallback onDecraseButtonClick;
 
   @override
   Widget build(BuildContext context) {
@@ -66,21 +70,30 @@ class CartItem extends StatelessWidget {
                     Row(
                       children: [
                         IconButton(
-                          onPressed: () {},
+                          onPressed: onIncraseButtonClick,
                           icon: const Icon(CupertinoIcons.plus_app),
                         ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Text(
-                          data.count!.toString(),
-                          style: Theme.of(context).textTheme.headline6,
-                        ),
-                        const SizedBox(
-                          width: 8,
+                        SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: Center(
+                            child: data.changeCountLoading
+                                ? const SizedBox(
+                                    width: 25,
+                                    height: 25,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                : Text(
+                                    data.count!.toString(),
+                                    style:
+                                        Theme.of(context).textTheme.headline6,
+                                  ),
+                          ),
                         ),
                         IconButton(
-                          onPressed: () {},
+                          onPressed: onDecraseButtonClick,
                           icon: const Icon(CupertinoIcons.minus_square),
                         ),
                       ],
@@ -115,8 +128,8 @@ class CartItem extends StatelessWidget {
                     child: Container(
                       width: 40,
                       height: 40,
-                      padding:
-                          const EdgeInsets.only(top: 4, bottom: 6, left: 4, right: 4),
+                      padding: const EdgeInsets.only(
+                          top: 4, bottom: 6, left: 4, right: 4),
                       child: const CircularProgressIndicator(
                         strokeWidth: 2.5,
                       ),

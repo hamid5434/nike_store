@@ -28,9 +28,8 @@ class CartRepository implements ICartRepository {
   }
 
   @override
-  Future<CartResponse> changeCount(int cartItemId, int count) {
-    // TODO: implement changeCount
-    throw UnimplementedError();
+  Future<CartResponse> changeCount(int cartItemId, int count) async {
+    return await dataSource.changeCount(cartItemId, count);
   }
 
   @override

@@ -54,6 +54,37 @@ class CartBloc extends Bloc<CartEvent, CartState> {
             await _loadCartItems(emit, false);
           }
         }
+      } else if (event is IncreaseCountButtonClicked ||
+          event is DecreaseCountButtonClicked) {
+        try {
+          int cartItemId = 0;
+          if (event is IncreaseCountButtonClicked) {
+            cartItemId = event.cartItemId;
+          } else if (event is DecreaseCountButtonClicked) {
+            cartItemId = event.cartItemId;
+          }
+
+          if (state is CartSuccess) {
+            final successState = (state as CartSuccess);
+            final cartItem = successState.cartItems.cartItems!
+                .firstWhere((element) => element.cartItemId == cartItemId);
+            cartItem.changeCountLoading = true;
+            emit(CartSuccess(successState.cartItems));
+
+            await Future.delayed(Duration(seconds: 4));
+            int newCount = event is IncreaseCountButtonClicked
+                ? cartItem.count! + 1
+                : cartItem.count! - 1;
+            await cartRepository.changeCount(cartItemId, newCount);
+
+            successState.cartItems.cartItems!
+                .firstWhere((element) => element.cartItemId == cartItemId)
+              ..count = newCount
+              ..changeCountLoading = false;
+            ;
+            emit(calcPriceInfo(successState.cartItems));
+          }
+        } catch (e) {}
       }
     });
   }

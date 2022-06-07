@@ -122,6 +122,17 @@ class _CartScreenState extends State<CartScreen> {
                           cartBloc
                               ?.add(CartDeleteButtonClicked(data.cartItemId!));
                         },
+                        onDecraseButtonClick: () {
+                          if(data.count! > 1){
+                            cartBloc
+                                ?.add(DecreaseCountButtonClicked(data.cartItemId!));
+                          }
+
+                        },
+                        onIncraseButtonClick: () {
+                          cartBloc
+                              ?.add(IncreaseCountButtonClicked(data.cartItemId!));
+                        },
                       );
                     },
                   ),

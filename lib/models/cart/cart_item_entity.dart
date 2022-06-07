@@ -36,6 +36,7 @@ class CartItemEntity {
   Product? product;
   int? count;
   bool deleteButtonLoading = false;
+  bool changeCountLoading = false;
 
   CartItemEntity({this.cartItemId, this.product, this.count});
 
