@@ -51,6 +51,7 @@ class BottomNavigation extends StatelessWidget {
                     isActive: selectIndex == CARTINDEX,
                     title: 'سبد خرید',
                     icons: CupertinoIcons.cart,
+                    isShowBadge: true,
                   ),
                   BottomNavigationItem(
                     onTab: () {
