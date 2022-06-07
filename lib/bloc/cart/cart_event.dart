@@ -6,8 +6,9 @@ abstract class CartEvent extends Equatable {
 
 class CartStarted extends CartEvent {
   final AuthInfo? authInfo;
+  final bool isRefreshing;
 
-  CartStarted(this.authInfo);
+  CartStarted(this.authInfo,{this.isRefreshing = false});
 
   @override
   // TODO: implement props

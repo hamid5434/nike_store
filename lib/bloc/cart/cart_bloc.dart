@@ -21,7 +21,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         if (authInfo == null || authInfo.accessToken!.isEmpty) {
           emit(const CartAuthRequired());
         } else {
-          await _loadCartItems(emit);
+          await _loadCartItems(emit, event.isRefreshing);
         }
       } else if (event is CartDeleteButtonClicked) {
         try {
@@ -37,33 +37,34 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
           if (state is CartSuccess) {
             final successState = (state as CartSuccess);
-           successState.cartItems.cartItems!.removeWhere(
-                    (element) => element.cartItemId == event.cartItemId);
-           if(successState.cartItems.cartItems!.isEmpty){
-             emit(const CartEmpty());
-           }
-           else {
-             emit(CartSuccess(successState.cartItems));
-           }
-
+            successState.cartItems.cartItems!.removeWhere(
+                (element) => element.cartItemId == event.cartItemId);
+            if (successState.cartItems.cartItems!.isEmpty) {
+              emit(const CartEmpty());
+            } else {
+              emit(calcPriceInfo(successState.cartItems));
+            }
           }
-
         } catch (e) {}
       } else if (event is CartAuthInfoChanged) {
         if (event.authInfo == null || event.authInfo!.accessToken!.isEmpty) {
           emit(const CartAuthRequired());
         } else {
           if (state is CartAuthRequired) {
-            await _loadCartItems(emit);
+            await _loadCartItems(emit, false);
           }
         }
       }
     });
   }
 
-  Future<void> _loadCartItems(Emitter<CartState> emit) async {
+  Future<void> _loadCartItems(
+      Emitter<CartState> emit, bool isRefreshing) async {
     try {
-      emit(CartLoading());
+      if (!isRefreshing) {
+        emit(CartLoading());
+      }
+
       final result = await cartRepository.getAll();
       if (result.cartItems!.isEmpty) {
         emit(const CartEmpty());
@@ -73,5 +74,21 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     } catch (e) {
       emit(CartError(AppException()));
     }
+  }
+
+  CartSuccess calcPriceInfo(CartItems cartItems) {
+    int totalPrice = 0;
+    int payablePrice = 0;
+    int shippingCost = 0;
+    cartItems.cartItems!.forEach((element) {
+      totalPrice += element.product!.previusPrice! * element.count!;
+      payablePrice += element.product!.price! * element.count!;
+    });
+
+    shippingCost = payablePrice >= 250000 ? 0 : 30000;
+    cartItems.payablePrice = payablePrice;
+    cartItems.totalPrice = totalPrice;
+    cartItems.shippingCost = shippingCost;
+    return CartSuccess(cartItems);
   }
 }

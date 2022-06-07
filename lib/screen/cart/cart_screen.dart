@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,9 +11,11 @@ import 'package:nike_store/data/repo/cart_repository.dart';
 import 'package:nike_store/models/cart/cart_item_entity.dart';
 import 'package:nike_store/models/login/login_model.dart';
 import 'package:nike_store/screen/auth/auth_screen.dart';
+import 'package:nike_store/screen/cart/price_info_screen.dart';
 import 'package:nike_store/screen/cart/widget/widgtes.dart';
 import 'package:nike_store/widgets/image_loading_service.dart';
 import 'package:nike_store/widgets/widgets.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -22,6 +26,8 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   CartBloc? cartBloc;
+  final RefreshController _refreshController = RefreshController();
+  StreamSubscription? stateStreamSubscription;
 
   @override
   void initState() {
@@ -42,6 +48,8 @@ class _CartScreenState extends State<CartScreen> {
     AuthRepository.authChangeNotifier
         .removeListener(authChangeNotifierListener);
     cartBloc?.close();
+    _refreshController.dispose();
+    stateStreamSubscription?.cancel();
   }
 
   @override
@@ -56,6 +64,15 @@ class _CartScreenState extends State<CartScreen> {
           create: (context) {
             final bloc = CartBloc(cartRepository);
             cartBloc = bloc;
+            stateStreamSubscription = bloc.stream.listen((state) {
+              if (_refreshController.isRefresh) {
+                if (state is CartSuccess) {
+                  _refreshController.refreshCompleted();
+                } else if (state is CartError) {
+                  _refreshController.refreshFailed();
+                }
+              }
+            });
             bloc.add(CartStarted(AuthRepository.authChangeNotifier.value));
             return bloc;
           },
@@ -71,17 +88,43 @@ class _CartScreenState extends State<CartScreen> {
                 );
               } else if (state is CartSuccess) {
                 final cartItems = state.cartItems;
-                return ListView.builder(
-                  itemCount: cartItems.cartItems!.length,
-                  itemBuilder: (context, index) {
-                    final data = cartItems.cartItems![index];
-                    return CartItem(
-                      data: data,
-                      onDeleteButtonClick: () {
-                        cartBloc?.add(CartDeleteButtonClicked(data.cartItemId!));
-                      },
-                    );
+                return SmartRefresher(
+                  controller: _refreshController,
+                  enablePullDown: true,
+                  header: const ClassicHeader(
+                    refreshingText: 'در حال بروز رسانی...',
+                    completeText: 'با موفقیت انجام شد',
+                    canTwoLevelText: 'در حال بروز رسانی...',
+                    idleText: 'بروز رسانی',
+                    releaseText: 'برای بروز رسانی رها کنید',
+                    failedText: 'بروز خطا',
+                  ),
+                  //footer: const ClassicFooter(),
+                  onRefresh: () {
+                    cartBloc?.add(CartStarted(
+                        AuthRepository.authChangeNotifier.value,
+                        isRefreshing: true));
                   },
+                  child: ListView.builder(
+                    itemCount: cartItems.cartItems!.length + 1,
+                    itemBuilder: (context, index) {
+                      if (index == cartItems.cartItems!.length) {
+                        return PriceInfoScreen(
+                          payablePrice: state.cartItems.payablePrice!,
+                          shippingCost: state.cartItems.shippingCost!,
+                          totalPrice: state.cartItems.totalPrice!,
+                        );
+                      }
+                      final data = cartItems.cartItems![index];
+                      return CartItem(
+                        data: data,
+                        onDeleteButtonClick: () {
+                          cartBloc
+                              ?.add(CartDeleteButtonClicked(data.cartItemId!));
+                        },
+                      );
+                    },
+                  ),
                 );
               } else if (state is CartAuthRequired) {
                 return EmptyView(
