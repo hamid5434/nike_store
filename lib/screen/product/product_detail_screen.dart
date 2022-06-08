@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nike_store/bloc/product/product_bloc.dart';
 import 'package:nike_store/common/theme.dart';
 import 'package:nike_store/common/utils.dart';
+import 'package:nike_store/data/repo/auth_repository.dart';
 import 'package:nike_store/data/repo/cart_repository.dart';
 import 'package:nike_store/models/product/product.dart';
 import 'package:nike_store/screen/product/comment/comment_list.dart';
@@ -43,8 +44,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           final bloc = ProductBloc(cartRepository);
           bloc.stream.listen((state) {
             if (state is ProductAddToCartButtonSuccess) {
-              _scaffoldKey.currentState?.showSnackBar(const SnackBar(
-                  content: Text('با موفقیت به سبد خرید شما اضافه گردید')));
+              _scaffoldKey.currentState?.showSnackBar(
+                const SnackBar(
+                  content: Text('با موفقیت به سبد خرید شما اضافه گردید'),
+                ),
+              );
             } else if (state is ProductAddToCartButtonError) {
               _scaffoldKey.currentState?.showSnackBar(SnackBar(
                   content: Text(
@@ -63,6 +67,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   builder: (context, state) {
                     return FloatingActionButton.extended(
                       onPressed: () {
+                        if (AuthRepository.authChangeNotifier.value == null) {
+                          _scaffoldKey.currentState?.showSnackBar(
+                            const SnackBar(
+                              content:
+                                  Text('برای خرید باید ابتدا وارد اکانت کاربری خود شوید'),
+                            ),
+                          );
+                          return;
+                        }
                         BlocProvider.of<ProductBloc>(context)
                             .add(CartAddButtonClick(widget.product.id!));
                       },
