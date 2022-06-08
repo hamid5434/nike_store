@@ -32,8 +32,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
             cartItem.deleteButtonLoading = true;
             emit(CartSuccess(successState.cartItems));
           }
-          await Future.delayed(Duration(seconds: 4));
+         // await Future.delayed(Duration(seconds: 4));
           await cartRepository.delete(event.cartItemId);
+
+          await cartRepository.count();
 
           if (state is CartSuccess) {
             final successState = (state as CartSuccess);
@@ -71,11 +73,14 @@ class CartBloc extends Bloc<CartEvent, CartState> {
             cartItem.changeCountLoading = true;
             emit(CartSuccess(successState.cartItems));
 
-            await Future.delayed(Duration(seconds: 4));
+            //await Future.delayed(Duration(seconds: 4));
             int newCount = event is IncreaseCountButtonClicked
                 ? cartItem.count! + 1
                 : cartItem.count! - 1;
+
             await cartRepository.changeCount(cartItemId, newCount);
+
+            await cartRepository.count();
 
             successState.cartItems.cartItems!
                 .firstWhere((element) => element.cartItemId == cartItemId)
@@ -108,6 +113,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   }
 
   CartSuccess calcPriceInfo(CartItems cartItems) {
+
     int totalPrice = 0;
     int payablePrice = 0;
     int shippingCost = 0;

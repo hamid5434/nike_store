@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nike_store/data/repo/cart_repository.dart';
 import 'package:nike_store/widgets/badge.dart';
 
 class BottomNavigationItem extends StatelessWidget {
@@ -33,10 +34,19 @@ class BottomNavigationItem extends StatelessWidget {
                   Center(
                     child: Icon(
                       icons,
-                      color: isActive ? Colors.blue.shade700 : Colors.grey.shade600,
+                      color: isActive
+                          ? Colors.blue.shade700
+                          : Colors.grey.shade600,
                     ),
                   ),
-                  isShowBadge ? Badge(value: 0): Container()
+                  isShowBadge
+                      ? ValueListenableBuilder<int>(
+                          valueListenable: CartRepository.cartItemCountNotifier,
+                          builder: (context, value, child) {
+                            return Badge(value: value);
+                          },
+                        )
+                      : Container()
                 ],
               ),
             ),

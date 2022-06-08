@@ -25,11 +25,18 @@ class MyApp extends StatelessWidget {
           elevation: 0,
           foregroundColor: LightThemeColors.primaryTextColor,
         ),
+        hintColor: LightThemeColors.seconderyTextColor,
+        inputDecorationTheme: InputDecorationTheme(
+            border: const OutlineInputBorder(),
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+              color: LightThemeColors.primaryTextColor.withOpacity(.1),
+            ))),
         colorScheme: ColorScheme.light(
           primary: LightThemeColors.primaryColor,
           secondary: LightThemeColors.seconderyColor,
           onSecondary: Colors.white,
-          secondaryVariant:  const Color(0xfff5f5f5),
+          secondaryVariant: const Color(0xfff5f5f5),
         ),
         textTheme: TextTheme(
           subtitle1: TextStyle(

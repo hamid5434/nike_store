@@ -67,7 +67,7 @@ class HomeScreen extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             } else if (state is HomeError) {
               return SingleChildScrollView(
-                child: Container(
+                child: SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height * .9,
                   child: AppErrorWidget(

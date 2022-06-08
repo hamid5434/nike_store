@@ -13,6 +13,7 @@ import 'package:nike_store/models/login/login_model.dart';
 import 'package:nike_store/screen/auth/auth_screen.dart';
 import 'package:nike_store/screen/cart/price_info_screen.dart';
 import 'package:nike_store/screen/cart/widget/widgtes.dart';
+import 'package:nike_store/screen/shipping/shipping_screen.dart';
 import 'package:nike_store/widgets/image_loading_service.dart';
 import 'package:nike_store/widgets/widgets.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -28,6 +29,7 @@ class _CartScreenState extends State<CartScreen> {
   CartBloc? cartBloc;
   final RefreshController _refreshController = RefreshController();
   StreamSubscription? stateStreamSubscription;
+  ValueNotifier<bool> isShowButtonPay = ValueNotifier(false);
 
   @override
   void initState() {
@@ -60,11 +62,41 @@ class _CartScreenState extends State<CartScreen> {
           centerTitle: true,
           title: const Text('سبد خرید'),
         ),
+        floatingActionButton: ValueListenableBuilder<bool>(
+          valueListenable: isShowButtonPay,
+          builder: (context, value, child) {
+            return Visibility(
+              visible: value,
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * .9,
+                child: FloatingActionButton.extended(
+                  onPressed: () {
+                    final state = cartBloc!.state;
+                    if (state is CartSuccess) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => ShippingScreen(
+                            totalPrice: state.cartItems.totalPrice!,
+                            shippingCost: state.cartItems.shippingCost!,
+                            payablePrice: state.cartItems.payablePrice!,
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                  label: const Text('پرداخت'),
+                ),
+              ),
+            );
+          },
+        ),
         body: BlocProvider<CartBloc>(
           create: (context) {
             final bloc = CartBloc(cartRepository);
             cartBloc = bloc;
             stateStreamSubscription = bloc.stream.listen((state) {
+              isShowButtonPay.value = state is CartSuccess ? true : false;
+
               if (_refreshController.isRefresh) {
                 if (state is CartSuccess) {
                   _refreshController.refreshCompleted();
@@ -107,6 +139,7 @@ class _CartScreenState extends State<CartScreen> {
                   },
                   child: ListView.builder(
                     itemCount: cartItems.cartItems!.length + 1,
+                    padding: const EdgeInsets.only(bottom: 80),
                     itemBuilder: (context, index) {
                       if (index == cartItems.cartItems!.length) {
                         return PriceInfoScreen(
@@ -123,15 +156,14 @@ class _CartScreenState extends State<CartScreen> {
                               ?.add(CartDeleteButtonClicked(data.cartItemId!));
                         },
                         onDecraseButtonClick: () {
-                          if(data.count! > 1){
-                            cartBloc
-                                ?.add(DecreaseCountButtonClicked(data.cartItemId!));
+                          if (data.count! > 1) {
+                            cartBloc?.add(
+                                DecreaseCountButtonClicked(data.cartItemId!));
                           }
-
                         },
                         onIncraseButtonClick: () {
-                          cartBloc
-                              ?.add(IncreaseCountButtonClicked(data.cartItemId!));
+                          cartBloc?.add(
+                              IncreaseCountButtonClicked(data.cartItemId!));
                         },
                       );
                     },

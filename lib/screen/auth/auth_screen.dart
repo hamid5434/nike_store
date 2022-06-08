@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nike_store/bloc/auth/auth_bloc.dart';
 import 'package:nike_store/data/repo/auth_repository.dart';
+import 'package:nike_store/data/repo/cart_repository.dart';
 import 'package:nike_store/widgets/widgets.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -26,7 +27,7 @@ class _AuthScreenState extends State<AuthScreen> {
       child: Theme(
         data: themeData.copyWith(
             snackBarTheme: SnackBarThemeData(
-                backgroundColor: themeData.colorScheme.primary,
+              backgroundColor: themeData.colorScheme.primary,
             ),
             elevatedButtonTheme: ElevatedButtonThemeData(
               style: ButtonStyle(
@@ -59,7 +60,10 @@ class _AuthScreenState extends State<AuthScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 32),
               child: BlocProvider<AuthBloc>(
                 create: (context) {
-                  final bloc = AuthBloc(authRepository);
+                  final bloc = AuthBloc(
+                    authRepository,
+                    cartRepository: cartRepository,
+                  );
                   bloc.stream.forEach((state) {
                     if (state is AuthSuccess) {
                       Navigator.pop(context);

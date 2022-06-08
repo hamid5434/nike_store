@@ -11,7 +11,7 @@ abstract class ICartDataSource {
 
   Future<void> delete(int cartItemId);
 
-  Future<int> count(int cartItemId);
+  Future<int> count();
 
   Future<CartItems> getAll();
 }
@@ -46,9 +46,9 @@ class CartRemoteDataSource
   }
 
   @override
-  Future<int> count(int cartItemId) {
-    // TODO: implement count
-    throw UnimplementedError();
+  Future<int> count() async {
+    final response = await httpClient.get('cart/count');
+    return response.data['count'];
   }
 
   @override

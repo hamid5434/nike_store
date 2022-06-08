@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nike_store/data/repo/auth_repository.dart';
+import 'package:nike_store/data/repo/cart_repository.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -11,10 +12,14 @@ class ProfileScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         ElevatedButton(
-            onPressed: () async {
-              await authRepository.signOut();
-            },
-            child: const Text('خروج از حساب',),),
+          onPressed: () async {
+            await authRepository.signOut();
+            CartRepository.cartItemCountNotifier.value = 0;
+          },
+          child: const Text(
+            'خروج از حساب',
+          ),
+        ),
       ],
     );
   }

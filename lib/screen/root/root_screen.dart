@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nike_store/data/repo/cart_repository.dart';
 import 'package:nike_store/screen/cart/cart_screen.dart';
 import 'package:nike_store/screen/home/home.dart';
 import 'package:nike_store/screen/profile/profile_screen.dart';
@@ -45,6 +46,13 @@ class _RootScreenState extends State<RootScreen> {
       return false;
     }
     return true;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    cartRepository.count();
   }
 
   @override
