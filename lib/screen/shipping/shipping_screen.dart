@@ -21,26 +21,29 @@ class ShippingScreen extends StatelessWidget {
         title: const Text('تحویل گیرنده'),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
+            const SizedBox(
+              height: 8,
+            ),
             const TextField(
               decoration: InputDecoration(label: Text('نام و نام خانوادگی')),
             ),
             const SizedBox(
-              height: 12,
+              height: 8,
             ),
             const TextField(
               decoration: InputDecoration(label: Text('شماره تماس')),
             ),
             const SizedBox(
-              height: 12,
+              height: 8,
             ),
             const TextField(
               decoration: InputDecoration(label: Text('کد پستی')),
             ),
             const SizedBox(
-              height: 12,
+              height: 8,
             ),
             const TextField(
               decoration: InputDecoration(label: Text('آدرس')),

@@ -26,7 +26,7 @@ class PriceInfoScreen extends StatelessWidget {
           ),
         ),
         Container(
-          margin: const EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 32),
+          margin: const EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 16),
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(5),
