@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nike_store/bloc/shipping/shipping_bloc.dart';
 import 'package:nike_store/data/repo/order_repository.dart';
 import 'package:nike_store/models/order/order.dart';
+import 'package:nike_store/payment_web_view.dart';
 import 'package:nike_store/screen/cart/price_info_screen.dart';
 import 'package:nike_store/screen/receipt/payment_receipt_screen.dart';
 
@@ -68,11 +69,23 @@ class _ShippingScreenState extends State<ShippingScreen> {
                 ),
               );
             } else if (state is ShippingSuccess) {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const PaymentReceiptScreen(),
-                ),
-              );
+              if (state.result.bankGatewayUrl.isNotEmpty) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => PaymentGetwayScreen(
+                      bankGetewayurl: state.result.bankGatewayUrl,
+                    ),
+                  ),
+                );
+              } else {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => PaymentReceiptScreen(
+                      orderId: state.result.orderId,
+                    ),
+                  ),
+                );
+              }
             }
           });
           return bloc;
@@ -155,13 +168,27 @@ class _ShippingScreenState extends State<ShippingScreen> {
                               width: 16,
                             ),
                             ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                BlocProvider.of<ShippingBloc>(context).add(
+                                  ShippingCreateOrder(
+                                    CreateOrderParams(
+                                      firstNameController.text,
+                                      lastNameController.text,
+                                      phoneNumberController.text,
+                                      postalCodeController.text,
+                                      addrssController.text,
+                                      PaymentMethod.online,
+                                    ),
+                                  ),
+                                );
+                              },
                               child: const Text('خرید اینترنتی'),
                             ),
                           ],
                         );
                 },
               ),
+              const SizedBox(height: 16,),
             ],
           ),
         ),
