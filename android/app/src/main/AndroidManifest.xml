@@ -2,6 +2,8 @@
     package="com.example.nike_store">
    <application
         android:label="nike_store"
+        android:requestLegacyExternalStorage="true"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
