@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
               color: LightThemeColors.primaryTextColor.withOpacity(.1),
-            ))),
+            ),),),
         colorScheme: ColorScheme.light(
           primary: LightThemeColors.primaryColor,
           secondary: LightThemeColors.seconderyColor,
