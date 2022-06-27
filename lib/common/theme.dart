@@ -7,4 +7,5 @@ class LightThemeColors {
   static Color seconderyTextColor = Color(0xffb3b6be);
 
   static Color seconderyTextColorError = Color(0xffce0b52);
+  static Color primaryColorError = Color(0xffd40a0a);
 }

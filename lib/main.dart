@@ -27,11 +27,17 @@ class MyApp extends StatelessWidget {
         ),
         hintColor: LightThemeColors.seconderyTextColor,
         inputDecorationTheme: InputDecorationTheme(
-            border: const OutlineInputBorder(),
-            enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
+
+          border: const OutlineInputBorder(),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
               color: LightThemeColors.primaryTextColor.withOpacity(.1),
-            ),),),
+            ),
+          ),
+          labelStyle: TextStyle(
+            color:  LightThemeColors.seconderyTextColor,
+          ),
+        ),
         colorScheme: ColorScheme.light(
           primary: LightThemeColors.primaryColor,
           secondary: LightThemeColors.seconderyColor,
@@ -41,7 +47,7 @@ class MyApp extends StatelessWidget {
         textTheme: TextTheme(
           subtitle1: TextStyle(
             fontFamily: 'iransans',
-            color: LightThemeColors.seconderyTextColor,
+            color: LightThemeColors.primaryTextColor,
           ),
           button: const TextStyle(
             fontFamily: 'iransans',

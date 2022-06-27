@@ -55,7 +55,7 @@ class HomeScreen extends StatelessWidget {
                             onTab: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => const ProductListScreen(
+                                  builder: (context) => ProductListScreen(
                                     sort: ProductSort.lastest,
                                   ),
                                 ),
@@ -68,7 +68,7 @@ class HomeScreen extends StatelessWidget {
                             onTab: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => const ProductListScreen(
+                                  builder: (context) => ProductListScreen(
                                     sort: ProductSort.populer,
                                   ),
                                 ),
