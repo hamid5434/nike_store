@@ -3,6 +3,14 @@ class ProductSort {
   static const int populer = 1;
   static const int priceHighToLow = 2;
   static const int priceLowToHigh = 3;
+
+  static const List<String> names = [
+    'جدیدترین',
+    'پربازدیدترین',
+    'قیمت نزولی',
+    'قیمت صعودی',
+  ];
+
 }
 
 class ProductEntity {

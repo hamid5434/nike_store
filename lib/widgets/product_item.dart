@@ -10,10 +10,15 @@ class ProductItem extends StatelessWidget {
     Key? key,
     required this.product,
     required this.borderRadius,
+    this.itemWidth = 176,
+    this.itemheight = 189,
   }) : super(key: key);
 
   final ProductEntity product;
   final BorderRadius borderRadius;
+
+  final double itemWidth;
+  final double itemheight;
 
   @override
   Widget build(BuildContext context) {
@@ -36,22 +41,21 @@ class ProductItem extends StatelessWidget {
               borderRadius: borderRadius,
               border: Border.all(
                 color: Colors.grey.withOpacity(.3),
-                width: .9,
+                width: .2,
               )
               //color: Colors.deepOrange.withOpacity(.2),
               //color: Colors.white,
               //boxShadow: kElevationToShadow[4]
               ),
-          width: 176,
+          width: itemWidth,
           child: Stack(
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(
-                    width: 176,
-                    height: 189,
+                  AspectRatio(
+                    aspectRatio: .93,
                     child: ClipRRect(
                       borderRadius: borderRadius,
                       child: CachedNetworkImage(
