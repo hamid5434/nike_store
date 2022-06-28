@@ -3,9 +3,15 @@ class AuthInfo {
   int? expiresIn;
   String? accessToken;
   String? refreshToken;
+  String? email;
 
-  AuthInfo(
-      {this.tokenType, this.expiresIn, this.accessToken, this.refreshToken});
+  AuthInfo({
+    this.tokenType,
+    this.expiresIn,
+    this.accessToken,
+    this.refreshToken,
+    this.email,
+  });
 
   AuthInfo.fromJson(Map<String, dynamic> json) {
     tokenType = json['token_type'];

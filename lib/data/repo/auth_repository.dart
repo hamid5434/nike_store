@@ -30,6 +30,7 @@ class AuthRepository implements IAuthRepository {
       {required String username, required String password}) async {
     final AuthInfo loginModel =
         await dataSource.login(username: username, password: password);
+    loginModel.email = username;
     await _persistAuthToken(loginModel: loginModel);
     debugPrint("access token is: " + loginModel.accessToken!);
   }
@@ -58,6 +59,7 @@ class AuthRepository implements IAuthRepository {
 
     await prefs.setString('access_token', loginModel.accessToken!);
     await prefs.setString('refresh_token', loginModel.refreshToken!);
+    await prefs.setString('email', loginModel.email!);
 
     await loadAuthInfo();
   }
@@ -67,10 +69,14 @@ class AuthRepository implements IAuthRepository {
 
     String access_token = await prefs.getString('access_token') ?? '';
     String refresh_token = await prefs.getString('refresh_token') ?? '';
+    String email = await prefs.getString('email') ?? '';
 
     if (access_token.isNotEmpty && refresh_token.isNotEmpty) {
-      authChangeNotifier.value =
-          AuthInfo(accessToken: access_token, refreshToken: refresh_token);
+      authChangeNotifier.value = AuthInfo(
+        accessToken: access_token,
+        refreshToken: refresh_token,
+        email: email,
+      );
     }
   }
 

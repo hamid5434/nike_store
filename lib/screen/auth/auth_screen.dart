@@ -21,7 +21,7 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
-    const onBackground = Colors.white;
+    // const onBackground = Colors.black;
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Theme(
@@ -37,22 +37,21 @@ class _AuthScreenState extends State<AuthScreen> {
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   )),
-                  backgroundColor: MaterialStateProperty.all(onBackground),
+                  backgroundColor: MaterialStateProperty.all(
+                    themeData.primaryColorDark,
+                  ),
                   foregroundColor: MaterialStateProperty.all(
                       themeData.colorScheme.secondary)),
             ),
-            colorScheme:
-                themeData.colorScheme.copyWith(onSurface: onBackground),
+            colorScheme: themeData.colorScheme.copyWith(),
             inputDecorationTheme: InputDecorationTheme(
-                labelStyle: const TextStyle(
-                  color: onBackground,
-                ),
+                labelStyle: const TextStyle(),
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide:
                         const BorderSide(color: Colors.white, width: 1)))),
         child: Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.secondary,
+          // backgroundColor: Theme.of(context).colorScheme.secondary,
           body: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Container(
@@ -91,7 +90,6 @@ class _AuthScreenState extends State<AuthScreen> {
                       children: [
                         Image.asset(
                           'assets/images/nike_logo.png',
-                          color: Colors.white,
                           width: 120,
                         ),
                         const SizedBox(
@@ -99,18 +97,14 @@ class _AuthScreenState extends State<AuthScreen> {
                         ),
                         Text(
                           'خوش آمدید',
-                          style: themeData.textTheme.headline4!.copyWith(
-                            color: Theme.of(context).colorScheme.onSecondary,
-                          ),
+                          style: themeData.textTheme.headline4!.copyWith(),
                         ),
                         const SizedBox(
                           height: 4,
                         ),
                         Text(
                           'لطفا وارد حساب کاربری خود شوید.',
-                          style: themeData.textTheme.headline6!.copyWith(
-                            color: Theme.of(context).colorScheme.onSecondary,
-                          ),
+                          style: themeData.textTheme.headline6!.copyWith(),
                         ),
                         const SizedBox(
                           height: 16,
@@ -133,14 +127,25 @@ class _AuthScreenState extends State<AuthScreen> {
                         ElevatedButton(
                           onPressed: () async {
                             BlocProvider.of<AuthBloc>(context).add(
-                                AuthButtonIsClicked(usernameController.text,
-                                    passwordController.text));
+                              AuthButtonIsClicked(
+                                usernameController.text,
+                                passwordController.text,
+                              ),
+                            );
                           },
                           child: state is AuthLoading
-                              ? const CircularProgressIndicator()
+                              ? CircularProgressIndicator(
+                                  color: themeData.colorScheme.onSecondary,
+                                )
                               : Text(
                                   state.isLoginMode ? 'ورود' : 'ثبت نام',
-                                  style: Theme.of(context).textTheme.headline6,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline6!
+                                      .copyWith(
+                                        color:
+                                            themeData.colorScheme.onSecondary,
+                                      ),
                                 ),
                         ),
                         const SizedBox(
@@ -158,8 +163,6 @@ class _AuthScreenState extends State<AuthScreen> {
                                 state.isLoginMode
                                     ? 'حساب کاربری ندارید؟'
                                     : 'حساب کاربری دارید؟',
-                                style: TextStyle(
-                                    color: onBackground.withOpacity(0.7)),
                               ),
                               const SizedBox(
                                 width: 8,

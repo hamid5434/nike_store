@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:nike_store/common/theme.dart';
 import 'package:nike_store/data/repo/auth_repository.dart';
 import 'package:nike_store/data/repo/cart_repository.dart';
+import 'package:nike_store/screen/auth/auth_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -13,31 +14,7 @@ class ProfileScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('پروفایل'),
         centerTitle: true,
-        actions: [
-          TextButton(
-            onPressed: () {
-              CartRepository.cartItemCountNotifier.value = 0;
-              authRepository.signOut();
-            },
-            child: Row(
-              children: [
-                Icon(
-                  Icons.exit_to_app,
-                  color: LightThemeColors.primaryColorError,
-                ),
-                SizedBox(
-                  width: 8,
-                ),
-                Text(
-                  'خروچ از حساب',
-                  style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                        color: LightThemeColors.primaryColorError,
-                      ),
-                )
-              ],
-            ),
-          ),
-        ],
+        actions: [],
       ),
       body: Center(
         child: Column(
@@ -59,7 +36,14 @@ class ProfileScreen extends StatelessWidget {
                 'assets/images/nike_logo.png',
               ),
             ),
-            const Text('h_khobani@yahoo.com'),
+            ValueListenableBuilder(
+              valueListenable: AuthRepository.authChangeNotifier,
+              builder: (context, value, child) {
+                return Text(value != null
+                    ? AuthRepository.authChangeNotifier.value!.email!
+                    : '');
+              },
+            ),
             const SizedBox(
               height: 32,
             ),
@@ -106,9 +90,95 @@ class ProfileScreen extends StatelessWidget {
             const Divider(
               height: 1,
             ),
+            ValueListenableBuilder(
+              valueListenable: AuthRepository.authChangeNotifier,
+              builder: (context, value, child) {
+                return AuthRepository.authChangeNotifier.value != null
+                    ? InkWell(
+                        onTap: () {
+                          dialog(context);
+                        },
+                        child: Container(
+                          height: 56,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 12),
+                          child: Row(
+                            children: const [
+                              Icon(CupertinoIcons.square_arrow_right),
+                              SizedBox(
+                                width: 16,
+                              ),
+                              Text('خروج از حساب کاربری')
+                            ],
+                          ),
+                        ),
+                      )
+                    : InkWell(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const AuthScreen(),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          height: 56,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 12),
+                          child: Row(
+                            children: const [
+                              Icon(CupertinoIcons.square_arrow_left),
+                              SizedBox(
+                                width: 16,
+                              ),
+                              Text('ورود به حساب کاربری')
+                            ],
+                          ),
+                        ),
+                      );
+              },
+            ),
+            const Divider(
+              height: 1,
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  void dialog(BuildContext context) {
+    showDialog(
+      context: context,
+      useRootNavigator: true,
+      builder: (BuildContext context) {
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: AlertDialog(
+            title: Text(
+              "خروج از حساب",
+              style: Theme.of(context).textTheme.caption,
+            ),
+            content: const Text("آیا میخواهید از حساب خود خارج شوید؟"),
+            actions: [
+              OutlinedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('برگشت'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  CartRepository.cartItemCountNotifier.value = 0;
+                  authRepository.signOut();
+                  Navigator.of(context).pop();
+                },
+                child: const Text('خروج'),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
