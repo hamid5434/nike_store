@@ -1,3 +1,7 @@
+import 'package:hive_flutter/adapters.dart';
+
+part 'product.g.dart';
+
 class ProductSort {
   static const int lastest = 0;
   static const int populer = 1;
@@ -10,16 +14,23 @@ class ProductSort {
     'قیمت نزولی',
     'قیمت صعودی',
   ];
-
 }
 
+@HiveType(typeId: 0)
 class ProductEntity {
+  @HiveField(0)
   int? id;
+  @HiveField(1)
   String? title;
+  @HiveField(2)
   int? price;
+  @HiveField(3)
   int? discount;
+  @HiveField(4)
   String? image;
+  @HiveField(5)
   int? status;
+  @HiveField(6)
   int? previousPrice;
 
   ProductEntity(

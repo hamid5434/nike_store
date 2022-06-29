@@ -2,11 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nike_store/common/utils.dart';
+import 'package:nike_store/data/source/favorite_manager.dart';
 import 'package:nike_store/models/product/product.dart';
 import 'package:nike_store/screen/product/product_detail_screen.dart';
 
-class ProductItem extends StatelessWidget {
-  const ProductItem({
+class ProductItem extends StatefulWidget {
+  ProductItem({
     Key? key,
     required this.product,
     required this.borderRadius,
@@ -21,16 +22,30 @@ class ProductItem extends StatelessWidget {
   final double itemheight;
 
   @override
+  State<ProductItem> createState() => _ProductItemState();
+}
+
+class _ProductItemState extends State<ProductItem> {
+  ValueNotifier? isFavorite;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isFavorite = ValueNotifier(favoriteManager.isFavorite(widget.product));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 12),
       child: InkWell(
-        borderRadius: borderRadius,
+        borderRadius: widget.borderRadius,
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => ProductDetailScreen(
-                product: product,
+                product: widget.product,
               ),
             ),
           );
@@ -38,7 +53,7 @@ class ProductItem extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
           decoration: BoxDecoration(
-              borderRadius: borderRadius,
+              borderRadius: widget.borderRadius,
               border: Border.all(
                 color: Colors.grey.withOpacity(.3),
                 width: .2,
@@ -47,7 +62,7 @@ class ProductItem extends StatelessWidget {
               //color: Colors.white,
               //boxShadow: kElevationToShadow[4]
               ),
-          width: itemWidth,
+          width: widget.itemWidth,
           child: Stack(
             children: [
               Column(
@@ -57,9 +72,9 @@ class ProductItem extends StatelessWidget {
                   AspectRatio(
                     aspectRatio: .93,
                     child: ClipRRect(
-                      borderRadius: borderRadius,
+                      borderRadius: widget.borderRadius,
                       child: CachedNetworkImage(
-                        imageUrl: product.image!,
+                        imageUrl: widget.product.image!,
                         imageBuilder: (context, imageProvider) => Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(
@@ -83,7 +98,7 @@ class ProductItem extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Text(
-                      product.title!,
+                      widget.product.title!,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -91,7 +106,7 @@ class ProductItem extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Text(
-                      product.previousPrice!.withPriceLabel,
+                      widget.product.previousPrice!.withPriceLabel,
                       style: Theme.of(context).textTheme.caption!.copyWith(
                             decoration: TextDecoration.lineThrough,
                             color: Theme.of(context).colorScheme.secondary,
@@ -101,7 +116,7 @@ class ProductItem extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Text(
-                      product.price!.withPriceLabel,
+                      widget.product.price!.withPriceLabel,
                       style: Theme.of(context).textTheme.subtitle2,
                     ),
                   ),
@@ -111,17 +126,40 @@ class ProductItem extends StatelessWidget {
               Positioned(
                 right: 10,
                 top: 10,
-                child: Container(
-                  width: 32,
-                  height: 32,
-                  padding: const EdgeInsets.all(5),
-                  //color: Colors.pink,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    color: Colors.white.withOpacity(.8),
-                  ),
-                  child: const Center(
-                    child: Icon(CupertinoIcons.heart, size: 25),
+                child: InkWell(
+                  onTap: () {
+                    print(isFavorite!.value);
+                    if (favoriteManager.isFavorite(widget.product)) {
+                      favoriteManager.delete(widget.product);
+                      isFavorite!.value = false;
+                    } else {
+                      favoriteManager.addFavorite(widget.product);
+                      isFavorite!.value = true;
+                    }
+                    print(isFavorite!.value);
+
+                  },
+                  child: Container(
+                    width: 32,
+                    height: 32,
+                    padding: const EdgeInsets.all(5),
+                    //color: Colors.pink,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      color: Colors.white.withOpacity(.8),
+                    ),
+                    child: Center(
+                      child: ValueListenableBuilder(
+                        valueListenable: isFavorite!,
+                        builder: (context, value, child) {
+                          return Icon(
+                              isFavorite!.value
+                                  ? CupertinoIcons.heart_fill
+                                  : CupertinoIcons.heart,
+                              size: 25);
+                        },
+                      ),
+                    ),
                   ),
                 ),
               ),

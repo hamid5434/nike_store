@@ -4,6 +4,7 @@ import 'package:nike_store/common/theme.dart';
 import 'package:nike_store/data/repo/auth_repository.dart';
 import 'package:nike_store/data/repo/cart_repository.dart';
 import 'package:nike_store/screen/auth/auth_screen.dart';
+import 'package:nike_store/screen/favorit/favorit_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -51,7 +52,13 @@ class ProfileScreen extends StatelessWidget {
               height: 1,
             ),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const FavoritScreen(),
+                  ),
+                );
+              },
               child: Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

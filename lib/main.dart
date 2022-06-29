@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:nike_store/common/theme.dart';
 import 'package:nike_store/data/repo/auth_repository.dart';
 import 'package:nike_store/data/repo/baner_repository.dart';
+import 'package:nike_store/data/source/favorite_manager.dart';
 import 'package:nike_store/screen/auth/auth_screen.dart';
 import 'package:nike_store/screen/root/root_screen.dart';
 
 void main() async {
+  await FavoriteManager.init();
   WidgetsFlutterBinding.ensureInitialized();
   await authRepository.loadAuthInfo();
   runApp(const MyApp());
@@ -27,7 +29,6 @@ class MyApp extends StatelessWidget {
         ),
         hintColor: LightThemeColors.seconderyTextColor,
         inputDecorationTheme: InputDecorationTheme(
-
           border: const OutlineInputBorder(),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
           labelStyle: TextStyle(
-            color:  LightThemeColors.seconderyTextColor,
+            color: LightThemeColors.seconderyTextColor,
           ),
         ),
         colorScheme: ColorScheme.light(
