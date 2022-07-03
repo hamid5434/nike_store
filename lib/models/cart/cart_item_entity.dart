@@ -4,8 +4,12 @@ class CartItems {
   int? totalPrice;
   int? shippingCost;
 
-  CartItems(
-      {this.cartItems, this.payablePrice, this.totalPrice, this.shippingCost});
+  CartItems({
+    this.cartItems,
+    this.payablePrice,
+    this.totalPrice,
+    this.shippingCost,
+  });
 
   CartItems.fromJson(Map<String, dynamic> json) {
     if (json['cart_items'] != null) {

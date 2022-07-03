@@ -6,6 +6,8 @@ abstract class IOrderDataSource {
   Future<CreateOrderResult> create(CreateOrderParams params);
 
   Future<PaymentReceiptData> getPaymentReceipt(int orderId);
+
+  Future<List<OrderEntity>> getOrders();
 }
 
 class OrderRemoteDataSource implements IOrderDataSource {
@@ -32,5 +34,11 @@ class OrderRemoteDataSource implements IOrderDataSource {
   Future<PaymentReceiptData> getPaymentReceipt(int orderId) async {
     final response = await httpClient.get('order/checkout?order_id=${orderId}');
     return PaymentReceiptData.fromJson(response.data);
+  }
+
+  @override
+  Future<List<OrderEntity>> getOrders() async {
+    final response = await httpClient.get('order/list');
+    return (response.data as List).map((e) => OrderEntity.fromJson(e)).toList();
   }
 }

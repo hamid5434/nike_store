@@ -23,4 +23,9 @@ class OrderRepository implements IOrderRepository {
   Future<PaymentReceiptData> getPaymentReceipt(int orderId) async {
     return await dataSource.getPaymentReceipt(orderId);
   }
+
+  @override
+  Future<List<OrderEntity>> getOrders() async{
+    return await dataSource.getOrders();
+  }
 }
